@@ -125,18 +125,21 @@ for f = 1:6
             end
             
         elseif  strcmp(cp(m).title, 'E/I ratio')
-            cp(m).curve = cp(m).curve./0.7803; % no need to scale
-            cp(m).data(:, 2) =  cp(m).data(:, 2)./0.7803;
+            cp(m).curve = cp(m).curve.*0.7803; % no need to scale
+            cp(m).data(:, 2) =  cp(m).data(:, 2).*0.7803;
+        elseif strcmp(cp(m).title, 'synaptic density')
+            cp(m).curve = cp(m).curve.*57.80; % no need to scale
+            cp(m).data(:, 2) =  cp(m).data(:, 2).*57.80;
         end
         h(ii) = plot(log(cp(1).p.t), cp(m).curve, 'Color', cp(m).color, 'LineWidth', 2, 'LineStyle', cp(m).LineStyle); hold on
         if ~isempty(cp(m).data)
             plot(log(cp(m).data(:, 1)), cp(m).data(:, 2), '.', ...
                 'MarkerSize', 25, 'Color', cp(m).color, 'LineWidth', 2);
         end
-
-         
+        
+        
         tt(ii).title = cp(m).title;
-        logx2raw;   
+        logx2raw;
         set(th, 'Rotation', 90);
         set(gca, 'XLim', [log(5) log(max(cp(1).p.t))]);
         set(gca, 'XTick', log([10 20 30 50]));
@@ -144,13 +147,18 @@ for f = 1:6
         set(gca, 'XLim', [log(5) log(max(cp(1).p.t))]);
         set(gca, 'YLim', [ 0 1.1]);
         legend(h, tt(:).title, 'Location', 'eastoutside');
-    if  strcmp(cp(m).title, 'E/I ratio')
-         set(gca, 'YLim', [ 0 1.3]);
-         l = line([log(14) log(60)], [1 1 ]); 
-         set(l, 'LineStyle', ':')
+        if  strcmp(cp(m).title, 'E/I ratio')
+            set(gca, 'YLim', [ 0 1]);
+            l = line([log(14) log(60)], [1 1 ]);
+            set(l, 'LineStyle', ':')
+        elseif strcmp(cp(m).title, 'synaptic density')
+            set(gca, 'YLim', [0 70]);
+            set(gca, 'YTick', [ 0:20:60])
+        end
+            
+        end
     end
-    end
-end
+
 
 
 return
